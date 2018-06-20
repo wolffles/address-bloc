@@ -6,4 +6,3 @@ class Entry < BlocRecord::Base
     "Name: #{name}\nPhone Number: #{phone_number}\nEmail: #{email}"
   end
 end
- 

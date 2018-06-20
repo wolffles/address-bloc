@@ -1,5 +1,5 @@
 PATH
-  remote: ../bloc_record
+  remote: /Users/wolfgang/Desktop/wolfstudy/bloc/bloc_record
   specs:
     bloc_record (0.0.0)
       sqlite3 (~> 1.3)
