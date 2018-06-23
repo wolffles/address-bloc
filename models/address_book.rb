@@ -27,3 +27,5 @@ class AddressBook < BlocRecord::Base
 
 
 end
+
+#this is all I need? from what I've googled people recommend redefining respond_to? and one example some guy recreates alias. I have no experience using method_missing so I'm just unsure of which I actually needed.

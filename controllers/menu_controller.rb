@@ -10,10 +10,11 @@ class MenuController
   def main_menu
     puts "#{@address_book.name} Address Book - #{Entry.count} entries"
     puts "1 - View all entries"
-    puts "2 - Create an entry"
-    puts "3 - Search for an entry"
-    puts "4 - Import entries from a CSV"
-    puts "5 - Exit"
+    puts "2 - browse by batches"
+    puts "3 - Create an entry"
+    puts "4 - Search for an entry"
+    puts "5 - Import entries from a CSV"
+    puts "6 - Exit"
     print "Enter your selection: "
 
     selection = gets.to_i
@@ -25,17 +26,21 @@ class MenuController
         main_menu
       when 2
         system "clear"
-        create_entry
+        find_batches
         main_menu
       when 3
         system "clear"
-        search_entries
+        create_entry
         main_menu
       when 4
         system "clear"
-        read_csv
+        search_entries
         main_menu
       when 5
+        system "clear"
+        read_csv
+        main_menu
+      when 6
         puts "Good-bye!"
         exit(0)
       else
@@ -51,9 +56,19 @@ class MenuController
       puts entry.to_s
       entry_submenu(entry)
     end
-
     system "clear"
     puts "End of entries"
+  end
+
+  def find_batches
+      print "start at?"
+      start = gets.chomp
+      print "batch_size?"
+      batch_size = gets.chomp
+      match = Entry.find_in_batches(start: start.to_i, batch_size: batch_size.to_i) do |contacts, batch| contacts.each {|contact| contact.name == 'Foo One'}
+      end
+      puts match.to_s
+      search_submenu(match)
   end
 
   def create_entry
@@ -74,15 +89,17 @@ class MenuController
 
   def search_entries
     print "Search by name: "
-    name = gets.chomp
-    match = Entry.find_by(:name, name)
-    system "clear"
-    if match
-      puts match.to_s
-      search_submenu(match)
-    else
-      puts "No match found for #{name}"
+    begin
+      name = gets.chomp
+      match = Entry.find_by_name(name)
+      system "clear"
+    rescue ArgumentError => e
+        puts e.message
+        retry
     end
+    puts "#{match.size} records found"
+    puts match.to_s
+    search_submenu(match)
   end
 
   def read_csv
