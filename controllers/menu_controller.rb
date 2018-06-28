@@ -1,5 +1,5 @@
 require_relative '../models/address_book'
-
+require 'json'
 class MenuController
   attr_reader :address_book
 
@@ -65,9 +65,9 @@ class MenuController
       start = gets.chomp
       print "batch_size?"
       batch_size = gets.chomp
-      match = Entry.find_in_batches(start: start.to_i, batch_size: batch_size.to_i) do |contacts, batch| contacts.each {|contact| contact.name == 'Foo One'}
+      match = Entry.find_each(start: start.to_i, batch_size: batch_size.to_i) do |contact|
       end
-      puts match.to_s
+      puts match[0].to_s
       search_submenu(match)
   end
 
