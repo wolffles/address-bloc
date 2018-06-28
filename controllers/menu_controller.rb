@@ -8,7 +8,8 @@ class MenuController
   end
 
   def main_menu
-    puts "#{@address_book.name} Address Book - #{Entry.count} entries"
+    puts "#{@address_book.name} Address Book Selected\n#{@address_book.entries.count} entries"
+    puts "0 - Switch AddressBook"
     puts "1 - View all entries"
     puts "2 - browse by batches"
     puts "3 - Create an entry"
@@ -50,8 +51,23 @@ class MenuController
     end
   end
 
+  def select_address_book_menu
+    puts "Select an Address Book:"
+     AddressBook.all.each_with_index do |address_book, index|
+       puts "#{index} - #{address_book.name}"
+     end
+
+     index = gets.chomp.to_i
+
+     @address_book = AddressBook.find(index + 1)
+     system "clear"
+     return if @address_book
+     puts "Please select a valid index"
+     select_address_book_menu
+   end
+
   def view_all_entries
-    Entry.all.each do |entry|
+      @address_book.entries.each do |entry|
       system "clear"
       puts entry.to_s
       entry_submenu(entry)
@@ -65,7 +81,7 @@ class MenuController
       start = gets.chomp
       print "batch_size?"
       batch_size = gets.chomp
-      match = Entry.find_each(start: start.to_i, batch_size: batch_size.to_i) do |contact|
+      match = @address_book.find_each(start: start.to_i, batch_size: batch_size.to_i) do |contact|
       end
       puts match[0].to_s
       search_submenu(match)
@@ -91,7 +107,7 @@ class MenuController
     print "Search by name: "
     begin
       name = gets.chomp
-      match = Entry.find_by_name(name)
+      match = @address_book.find_by_name(name)
       system "clear"
     rescue ArgumentError => e
         puts e.message
