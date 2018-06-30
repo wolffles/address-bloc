@@ -20,10 +20,9 @@ class AddressBook < BlocRecord::Base
 
   def find_entry(name)
     Entry.where(name: name, address_book_id: self.id).first
-  end 
+  end
 
   def import_from_csv(file_name)
-    # Implementation goes here
     csv_text = File.read(file_name)
     csv = CSV.parse(csv_text, headers: true, skip_blanks: true)
     csv.each do |row|
@@ -34,5 +33,3 @@ class AddressBook < BlocRecord::Base
 
 
 end
-
-#this is all I need? from what I've googled people recommend redefining respond_to? and one example some guy recreates alias. I have no experience using method_missing so I'm just unsure of which I actually needed.
